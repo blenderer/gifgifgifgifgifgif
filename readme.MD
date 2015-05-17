@@ -146,4 +146,6 @@ gifgifgifgifgifgif supports two basic endpoints, User registration and gif query
 
 ## Config
 
-Config is stored in a gitignored file: [config.js](config.js)
+Config is stored in a gitignored file (config.js in the root): [config.js.example](config.js.example)
+
+* Rename `config.js.example` to `config.js` and replace the content with your own configurations.
