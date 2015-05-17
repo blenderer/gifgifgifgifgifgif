@@ -4,10 +4,8 @@
   "description": "gifgifgifgifgifgif supports two basic endpoints, User registration and gif query",
   "main": "config.js",
   "dependencies": {
-    "express": "^4.12.3"
-  },
-  "devDependencies": {
-    "express": "^4.12.3"
+    "express": "^4.12.3",
+    "mongoose": "^4.0.3"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
