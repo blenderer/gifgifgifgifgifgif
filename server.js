@@ -18,4 +18,4 @@ app.post('/user', function(req, res) {
     res.send(req.query.user + " " + req.query.password);
 });
 
-app.listen(3000);
+app.listen(config.port);
