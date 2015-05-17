@@ -11,8 +11,36 @@ var querystring = require('querystring');
 var express = require('express');
 var app = express();
 
+var users = [
+    {
+        username: 'blenderer',
+        password: 'password'
+    },
+    {
+        username: 'admin',
+        password: 'admin'
+    }
+];
+
+
+
+var passport = require('passport')
+  , DigestStrategy = require('passport-http').DigestStrategy;
+
+passport.use(new DigestStrategy({ qop: 'auth'},
+  function(username, done) {
+    return done('null', users[0], users[0].password);
+  }
+));
+
+app.use(passport.initialize());
+
+
+
 // our gif search endpoint
-app.get('/', function(req, res) {
+app.get('/',
+    //passport.authenticate('digest', { session: false }),
+    function(req, res) {
 
     // build our query parameters
     queryParams = {
