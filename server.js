@@ -1,8 +1,11 @@
 // get our config
 var config = require('./config.js');
 
-// http so we can access giphy
-var http = require('http');
+// request so we can access giphy
+var request = require('request');
+
+// query string helps us serialize parameters
+var querystring = require('querystring');
 
 // scaffold the express app
 var express = require('express');
@@ -10,7 +13,42 @@ var app = express();
 
 // our gif search endpoint
 app.get('/', function(req, res) {
-    res.send(req.query.q);
+
+    // build our query parameters
+    queryParams = {
+        q: req.query.q,
+        api_key: config.giphyKey
+    };
+
+    // serialize our query parameters
+    giphyQueryString = querystring.stringify(queryParams);
+
+    request('http://api.giphy.com/v1/gifs/search?' + giphyQueryString, function (error, giphyResponse, body) {
+        
+        // if everyone is feeling Ok.
+        if (!error && giphyResponse.statusCode == 200) {
+            var result = JSON.parse(body);
+
+            if (result.data) {
+
+                // check if we have any results
+                if (result.data.length > 0) {
+
+                    // we only need to get the first result
+                    res.send(result.data[0]);
+                }
+                else {
+                    res.status(404).send({msg: 'No results'});
+                }
+            }
+            else {
+                res.status(500).send({msg: 'Uh-oh! Something went wrong!'});
+            }
+        }
+        else {
+            res.status(500).send({msg: 'Uh-oh! Something went wrong!'});
+        }
+    })
 });
 
 // our user creation endpoint
