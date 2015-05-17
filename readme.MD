@@ -2,13 +2,13 @@
 
 gifgifgifgifgifgif supports two basic endpoints, User registration and gif query
 
-## Registration endpoint (POST)
+## Registration endpoint (POST) {server}/user
 
-* Accepts POST with query parameters: "username" and "password".
-* Stores username/password in mongodb
+* Accepts POST with query parameters: "user" and "password".
+* Stores user/password in mongodb
 * Returns Accepted (201 - Created) or (500 - Bad Request) or (500 Username is Taken)
 
-## Gif query endpoint (GET)
+## Gif query endpoint (GET) {server}/
 
 * Accepts GET with query parameters: "q", accepts a query string.
 * Forces Basic Auth
