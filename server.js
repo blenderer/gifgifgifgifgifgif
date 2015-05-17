@@ -1,6 +1,11 @@
 // get our config
 var config = require('./config.js');
 
+var crypto = require('crypto');
+var saltLengthBytes = 64;
+var hashIterations = 10000;
+var keyLengthBytes = 64;
+
 
 // request so we can access giphy
 var request = require('request');
@@ -93,7 +98,7 @@ app.get('/',
 // our user creation endpoint
 app.post('/user', function(req, res) {
     
-    if (!req.query.username || !req.query.password) {
+    if (!req.query.user || !req.query.password) {
         res.status(500).send({msg: 'Username or password is missing.'});
         return false;
     }
@@ -102,7 +107,7 @@ app.post('/user', function(req, res) {
       collection = db.collection('users');
 
       collection.insert({
-        username: req.query.username,
+        username: req.query.user,
         password: req.query.password
       }, null, function(err, records) {
         if (!err) {
