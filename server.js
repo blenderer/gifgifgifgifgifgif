@@ -108,8 +108,8 @@ app.post('/user', function(req, res) {
         if (!err) {
             res.status(201).send({msg: 'User created.'})
         }
-        else {
-            res.status(500).send({msg: err.errmsg});
+        else if (err.code == 11000) {
+            res.status(500).send({msg: "Username is taken"});
         }
       });
       
