@@ -1,6 +1,7 @@
 // get our config
 var config = require('./config.js');
 
+
 // request so we can access giphy
 var request = require('request');
 
@@ -11,17 +12,10 @@ var querystring = require('querystring');
 var express = require('express');
 var app = express();
 
-var users = [
-    {
-        username: 'blenderer',
-        password: 'password'
-    },
-    {
-        username: 'admin',
-        password: 'admin'
-    }
-];
 
+var MongoClient = require('mongodb').MongoClient
+  , assert = require('assert');
+ 
 
 
 var passport = require('passport')
@@ -29,7 +23,22 @@ var passport = require('passport')
 
 passport.use(new DigestStrategy({ qop: 'auth'},
   function(username, done) {
-    return done('null', users[0], users[0].password);
+
+    MongoClient.connect('mongodb://localhost:27017/test', function(err, db) {
+      collection = db.collection('users');
+
+      collection.findOne({ 'username': username }, function(err, item) {
+
+        if (item) {
+            done(null, item, item.password);
+        }
+        else {
+            done('Username and password does not match');
+        }
+        db.close();
+      })
+      
+    });
   }
 ));
 
@@ -39,7 +48,7 @@ app.use(passport.initialize());
 
 // our gif search endpoint
 app.get('/',
-    //passport.authenticate('digest', { session: false }),
+    passport.authenticate('digest', { session: false }),
     function(req, res) {
 
     // build our query parameters
@@ -50,6 +59,8 @@ app.get('/',
 
     // serialize our query parameters
     giphyQueryString = querystring.stringify(queryParams);
+
+    
 
     request('http://api.giphy.com/v1/gifs/search?' + giphyQueryString, function (error, giphyResponse, body) {
         
@@ -81,7 +92,28 @@ app.get('/',
 
 // our user creation endpoint
 app.post('/user', function(req, res) {
-    res.send(req.query.user + " " + req.query.password);
+    
+    if (!req.query.username || !req.query.password) {
+        res.status(500).send({msg: 'Username or password is missing.'});
+        return false;
+    }
+
+    MongoClient.connect('mongodb://localhost:27017/test', function(err, db) {
+      collection = db.collection('users');
+
+      collection.insert({
+        username: req.query.username,
+        password: req.query.password
+      }, null, function(err, records) {
+        if (!err) {
+            res.status(201).send({msg: 'User created.'})
+        }
+        else {
+            res.status(500).send({msg: err.errmsg});
+        }
+      });
+      
+    });
 });
 
 app.listen(config.port);
