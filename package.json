@@ -1,0 +1,25 @@
+{
+  "name": "gifgifgifgifgifgif",
+  "version": "1.0.0",
+  "description": "gifgifgifgifgifgif supports two basic endpoints, User registration and gif query",
+  "main": "config.js",
+  "dependencies": {
+    "express": "^4.12.3"
+  },
+  "devDependencies": {
+    "express": "^4.12.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blenderer/gifgifgifgifgifgif.git"
+  },
+  "author": "Eric Harrison (eric.h@rrison.io)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/blenderer/gifgifgifgifgifgif/issues"
+  },
+  "homepage": "https://github.com/blenderer/gifgifgifgifgifgif"
+}
